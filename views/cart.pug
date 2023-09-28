@@ -1,0 +1,37 @@
+extends ./layouts/main.pug
+
+block content
+  h1.cart Кошик
+  #cart
+    if !phones || phones.length === 0
+      .basket-empty 
+        p У кошику нічого немає
+        img(src='/img/empty-cart.png')
+        a.btn.btn-primary(href="/phones") Обрати свій телефон
+    else
+      table.table-striped
+        thead
+          tr
+            th Назва
+            th Кількість
+            th Ціна (за од.)
+            th &nbsp;
+        tbody
+          each phone, index in phones
+            tr
+              td= phone.title
+              td= phone.count 
+              td(style="white-space:nowrap;")
+                = phone.price
+                |  грн.
+              td
+                button.btn.btn-delete.btn-remove(data-csrf=csrf data-id=phone._id) Видалити
+      .row.my-5.basket-act
+        form(action="/phones") 
+          button.btn.btn-primary Продовжити покупки
+        .basket-price
+          p Ціна: 
+            span.basket-price-value= price.toLocaleString('uk-UA')
+        form(action='/orders', method='post')
+          input(type='hidden', name='_csrf', value=csrf)
+          button.btn.btn-primary(type="submit") Оформити замовлення

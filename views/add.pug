@@ -1,0 +1,30 @@
+extends ./layouts/main.pug
+
+block content
+  div.container.add
+    h2 Додати телефон
+    form(action='/add', method='post')
+      .mb-3.add-phone
+        label.form-label(for='brand') Бренд телефона:
+        input.form-control(type='text', id='brand', aria-describedby='mobileHelp', name='brand', value=(errors ? data.brand : ''))
+        #mobileHelp.form-text *Введіть бренд телефону, який ви хочете додати
+      .mb-3.add-phone
+        label.form-label(for='title') Модель телефона:
+        input.form-control(type='text', id='title', aria-describedby='mobileHelp', name='title', value=(errors ? data.title : ''))
+        #mobileHelp.form-text *Введіть модель телефону, який ви хочете додати
+      .mb-3.add-phone
+        label.form-label(for='price') Вартість телефону (UAH):
+        input.form-control(type='number', id='price', aria-describedby='mobileHelp', name='price', value=(errors ? data.price : ''))
+        #mobileHelp.form-text *Введіть ціну телефону, який ви додаєте
+      .mb-3.add-phone
+        label.form-label(for='image') Фото телефона:
+        input.form-control(type='text', id='image', aria-describedby='mobileHelp', name='image', value=(errors ? data.image : ''))
+        #mobileHelp.form-text *Вставте посилання на фото телефона
+      .mb-3.add-phone
+        label.form-label(for='description') Опис телефона:
+        textarea.form-control(type='text', id='description', aria-describedby='mobileHelp', name='description', value=(errors ? data.description : ''), style='width:100%')
+        #emailHelp.form-text *Введіть/замініть опис телефона
+      input(type='hidden', name='_csrf', value=csrf)
+      button.btn.btn-primary(type='submit', style='float: left') Додати телефон
+    if errors
+      p.err= errors 

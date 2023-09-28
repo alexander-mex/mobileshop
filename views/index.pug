@@ -1,0 +1,16 @@
+extends ./layouts/main.pug
+
+block content
+  div.container
+    h1 Головна сторінка
+    p Ми пропонуємо широкий вибір мобільних телефонів!
+    section.home_slider
+      .swiper.home-slider
+        .swiper-wrapper
+          section.swiper-slide.slide(style="background:url(./img/bg_1.jpg) no-repeat;")
+          section.swiper-slide.slide(style="background:url(./img/bg_2.jpg) no-repeat;")
+          section.swiper-slide.slide(style="background:url(./img/bg_3.jpg) no-repeat;")
+        .swiper-pagination
+    a.btn.btn-primary.choice(href="/phones") Оберіть свій телефон
+
+  script(src="/js/slider.js")

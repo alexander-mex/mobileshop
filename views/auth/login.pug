@@ -1,0 +1,60 @@
+extends ../layouts/main.pug
+
+block content
+  .auth
+    .container
+      ul.nav.nav-pills.mb-3#pills-tab(role="tablist")
+        li.nav-item(role="presentation")
+          a.nav-link.active#pills-login-tab(data-bs-toggle="pill" data-bs-target="#pills-login" role="tab" aria-controls="pills-login" aria-selected="true", aria-current="page") Вхід
+        li.nav-item(role="presentation")
+          a.nav-link#pills-register-tab(data-bs-toggle="pill" data-bs-target="#pills-register" role="tab" aria-controls="pills-register" aria-selected="false", aria-current="page") Реєстрація
+
+      div.tab-content#pills-tabContent
+        div.tab-pane.fade.show.active#pills-login(role="tabpanel" aria-labelledby="pills-login-tab" tabindex="0") 
+          h1 Вхід
+          form(action='/auth/login' method='post')
+            div.mb-3
+              label(for="email", class="form-label") Email
+              input(type="email", class="form-control", id="email", name='email', required='required')
+              div.form-text(data-error='Невірно задано Email')
+            div.mb-3
+              label(for="password", class="form-label") Пароль
+              input(type="password", class="form-control", id="password", name='password', required='required')
+              div.form-text(data-error='Невірно введено пароль')
+            input(type='hidden', name='_csrf', value=csrf)
+            div.button-container
+              button.btn.btn-primary(type='submit') Увійти
+              p.forget__pass 
+                a(href="/auth/reset") Відновлення паролю  
+        if loginErr
+          each err in loginErr
+            p.reg-error= loginErr
+        if loginPassErr
+          each err in loginPassErr
+            p.reg-error= loginPassErr
+        div.tab-pane.fade#pills-register(role="tabpanel" aria-labelledby="pills-register-tab" tabindex="0") 
+          h1 Реєстрація
+          form(action='/auth/register' method='post')
+            div.mb-3
+              label(for="name", class="form-label") Напишить Ваше ім'я
+              input(type="text", class="form-control", id="name", name='name')
+            div.mb-3
+              label(for="email", class="form-label") Напишить Ваш Email
+              input(type="email", class="form-control", id="reg-email", name='email', required='required')
+              div.form-text(data-error='Невірно задано Email')
+            div.mb-3
+              label(for="password", class="form-label") Введіть Ваш пароль
+              input(type="password", class="form-control", id="reg-password", name='password', required='required')
+              div.form-text(data-error='Невірно введено пароль')
+            div.mb-3
+              label(for="confirm", class="form-label") Повторіть пароль
+              input(type="password", class="form-control", id="confirm", name='confirm', required='required')
+              div.form-text(data-error='Невірно введено пароль')
+            input(type='hidden', name='_csrf', value=csrf)
+            button.btn.btn-primary(type='submit') Реєстрація
+        if error
+          each err in error
+            p.reg-error= error
+        if passErr
+          each err in passErr
+            p.reg-error= passErr

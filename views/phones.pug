@@ -1,0 +1,116 @@
+extends ./layouts/main.pug
+
+block content
+  div.container.phones-container
+    h1.phones-head Смартфони
+    .sort
+      form(action="/phones/sort", method="get")
+        input(type="hidden", name="sort", value="")
+        label(for="sort") Сортувати за:
+          select#sort(name="sort", required)
+            option(value="rating", selected=selectedSortOption === 'rating') За рейтингом
+            option(value="min-price", selected=selectedSortOption === 'min-price') Від дешевших до дорогих
+            option(value="max-price", selected=selectedSortOption === 'max-price') Від дорогих до дешевших
+
+
+    .row.phones
+      .section-filter
+        form(action="/phones/filter", method="get")
+          div.filter
+            ul
+              li
+                label
+                  input(type='checkbox', name='brand', value='Apple') 
+                  | Apple
+                li
+                  label
+                    input(type='checkbox', name='brand', value='Samsung') 
+                    | Samsung
+                li
+                  label
+                    input(type='checkbox', name='brand', value='Xiaomi') 
+                    | Xiaomi
+                li
+                  label
+                    input(type='checkbox', name='brand', value='Realme') 
+                    | Realme
+                li
+                  label
+                    input(type='checkbox', name='brand', value='Tecno') 
+                    | Tecno
+                li
+                  label
+                    input(type='checkbox', name='brand', value='Motorola') 
+                    | Motorola
+                li
+                  label
+                    input(type='checkbox', name='brand', value='Poco') 
+                    | Poco
+                li
+                  label
+                    input(type='checkbox', name='brand', value='OnePlus') 
+                    | OnePlus
+                li
+                  label
+                    input(type='checkbox', name='brand', value='ZTE') 
+                    | ZTE
+                li
+                  label
+                    input(type='checkbox', name='brand', value='Інше') 
+                    | Інше
+              input(type="hidden", name="_csrf", value=csrf)
+              button.card-link.filter-btn(type="submit") Застосувати
+              a.card-link.filter-btn(href="/phones") Скинути
+
+      if phones && phones.length
+        .section-phones
+          .row.phones
+            each phone in phones
+              if phone
+                .col
+                  div.card
+                    img.card-img-top(src=phone.image, alt=phone.title)
+                    div.card-body.btns
+                      h5.card-title.phone-title= phone.title
+                      div.card-body.btns
+                        p.price= phone.price
+                      div.card-body.btns
+                        form(action=`/phones/${phone.id}`) 
+                          button.card-link.link-btn Детальніше
+                        if isAuth && isAdmin
+                          form(action=`/phones/${phone.id}/edit`, method='get')
+                            input(type='hidden', name='allow', value='true')
+                            button.card-link.link-btn(type='submit') Редагувати
+                        if isAuth
+                          form(action='/cart/add', method='post')
+                            input(type='hidden', name='_csrf', value=csrf)
+                            input(type='hidden', name='id', value=phone.id)
+                            button.card-link.link-btn(type='submit') Купити
+          .page 
+            ul.pagination
+              if currentPage > 1
+                li
+                  a(href=`/phones?page=${currentPage - 1}`) Минула
+              if (currentPage > 3)
+                li
+                  a(href='/phones?page=1') 1
+              if (currentPage > 4)
+                li
+                  span.separator ...
+              each i in Array.from({ length: Math.min(3, totalPages) }, (_, index) => index + Math.max(1, totalPages - 2))
+                - const isCurrentPage = i === currentPage
+                li
+                  a(href=`/phones?page=${i}${isCurrentPage ? ' class="current"' : ''}`)= i
+              if (currentPage + 4 < totalPages)
+                li
+                  span.separator ...
+              if (currentPage + 3 < totalPages)
+                li
+                  a(href=`/phones?page=${totalPages}`)= totalPages
+              if (currentPage < totalPages)
+                li
+                  a(href=`/phones?page=${currentPage + 1}`) Наступна
+
+      else
+        .phone-none
+          p.phones-none Немає даних для відображення

@@ -1,0 +1,46 @@
+extends ./layouts/main.pug
+
+block content
+  div.profile-container
+    h1 Сторінка користувача:
+
+    .mb-3.wrapper
+      if user.avatarUrl
+        .mb-3.wrapper
+          div.rounded.float-start.position-relative
+            img.img-thumbnail.avatar(src=user.avatarUrl, alt=`avatar-${user.name}`)
+            input(type='hidden', name='_csrf', value=csrf)
+            i#deleteAvatar.fa.fa-solid.fa-xmark.close-icon(onClick="deleteAvatar(this)")
+      else
+        div.rounded.float-start
+          div.avatarnone
+            p.avatar-none Немає вашого фото
+      div.rounded.float-end
+        .d-grid
+          form.row.g-3.needs-validation(novalidate action="/profile" method='post' enctype='multipart/form-data')
+            div.col-md-4.position-relative
+              label.form-label(for='email') Змінити email:
+              input.form-control.user.email(type='email', id='email', name='email', value= user.email, required)
+              label.form-label(for='title') Ваше ім'я:
+              input.form-control.user.name(name='name', value= user.name, required)
+              label.form-label(for='password') Змінити пароль:
+              input.form-control.user.password(type='password', id='password', name='password', required)
+            .col-12
+              label.btn.btn-primary(for="avatar")
+                | Завантажити фото
+                input.form-control.file-input(type="file" id="avatar" name="avatar" style='display:none' onChange="displayFileName(this)")
+              span
+                #file-name
+            .col-12
+              input(type='hidden', name='_csrf', value=csrf)
+              button.btn.btn-primary(type='submit') Внести зміни
+
+    script.
+      function displayFileName(input) {
+        const fileName = input.files[0].name;
+        document.getElementById("file-name").textContent = fileName;
+      }
+      function deleteAvatar(element) {
+        const parentContainer = element.closest('.position-relative');
+        parentContainer.remove();
+      }

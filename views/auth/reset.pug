@@ -1,0 +1,18 @@
+extends ../layouts/main.pug
+
+block content
+  .auth
+    .container
+      div.tab-content#pills-tabContent
+        div.tab-pane.fade.show.active#pills-login(role="tabpanel" aria-labelledby="pills-login-tab" tabindex="0") 
+          h1 Забули пароль?
+          form(action='/auth/reset' method='post')
+            div.mb-3
+              label(for="email", class="form-label") Введіть Ваш Email:
+              input(type="email", class="form-control", id="email", name='email', required='required')
+              div.form-text(data-error='Невірно задано Email')
+            input(type='hidden', name='_csrf', value=csrf)
+            button.btn.btn-primary(type='submit', style='float: left') Скинути пароль
+          if error
+            each err in error
+              p.reg-error= error

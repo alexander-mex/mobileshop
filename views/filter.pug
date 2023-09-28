@@ -1,0 +1,77 @@
+extends ./layouts/main.pug
+
+block content
+  div.container
+    h1.phones-head Смартфони
+    .sort
+      label(for="sort") Сортирувати за:
+      select#sort(name="sort", required)
+        option(value="rating") За рейтингом
+        option(value="min-price") Від дешевших до дорогих
+        option(value="max-price") Від дорогих до дешевших
+
+    if phones && phones.length
+      .row
+        .section-filter
+          div.filter
+            ul
+              li
+                label
+                  input(type='checkbox', name='brand', value='apple') 
+                  | Apple
+              li
+                label
+                  input(type='checkbox', name='brand', value='samsung') 
+                  | Samsung
+              li
+                label
+                  input(type='checkbox', name='brand', value='xiaomi') 
+                  | Xiaomi
+              li
+                label
+                  input(type='checkbox', name='brand', value='realme') 
+                  | Realme
+              li
+                label
+                  input(type='checkbox', name='brand', value='tecno') 
+                  | Tecno
+              li
+                label
+                  input(type='checkbox', name='brand', value='motorola') 
+                  | Motorola
+              li
+                label
+                  input(type='checkbox', name='brand', value='poco') 
+                  | Poco
+              li
+                label
+                  input(type='checkbox', name='brand', value='oneplus') 
+                  | OnePlus
+              form(action=`/phones`, method='post')
+                input(type='hidden', name='_csrf', value=csrf)
+                button.card-link.filter-btn(type='submit') Застосувати
+        .section-phones
+          .row
+            each phone in phones
+              .col
+                div.card
+                  img.card-img-top(src=phone.image, alt=phone.title)
+                  div.card-body.btns
+                    h5.card-title.phone-title= phone.title
+                  div.card-body.btns
+                    p.price= phone.price
+                  div.card-body.btns
+                    form(action=`/phones/${phone.id}`) 
+                      button.card-link.link-btn Детальніше
+                    if isAuth && isAdmin
+                      form(action=`/phones/${phone.id}/edit`, method='get')
+                        input(type='hidden', name='allow', value='true')
+                        button.card-link.link-btn(type='submit') Редагувати
+                    if isAuth
+                      form(action='/cart/add', method='post')
+                        input(type='hidden', name='_csrf', value=csrf)
+                        input(type='hidden', name='id', value=phone.id)
+                        button.card-link.link-btn(type='submit') Купити
+    else
+      .phone-none
+        p.phones-none Немає даних для відображення

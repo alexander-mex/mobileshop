@@ -1,0 +1,52 @@
+div.d-flex.justify-content-between
+  nav.navbar.d-flex
+    ul.nav.nav-pills
+      li.nav-item
+        if isHome
+          a.nav-link.active(aria-current="page", href="/") Головна
+        else
+          a.nav-link(href="/") Головна
+
+      li.nav-item
+        if isPhone
+          a.nav-link.active(href="/phones") Смартфони
+        else 
+          a.nav-link(href="/phones") Смартфони
+
+      if isAdmin 
+        li.nav-item
+          if isAdd
+            a.nav-link.active(href="/add") Додати телефон
+          else
+            a.nav-link(href="/add") Додати телефон
+
+      if isAuth
+        li.nav-item
+          if isCart
+            a.nav-link.active(href="/cart") Кошик
+          else
+            a.nav-link(href="/cart") Кошик
+
+        li.nav-item
+          if isOrders
+            a.nav-link.active(href="/orders") Замовлення
+          else
+            a.nav-link(href="/orders") Замовлення
+
+        li.nav-item
+          if isProfile
+            a.nav-link.active(href="/profile") Користувач
+          else
+            a.nav-link(href="/profile") Користувач
+
+        a.nav-link(href="/auth/logout") Вийти
+
+      else
+        li.nav-item
+          if isLogin
+            a.nav-link.active(href="/auth/login") Авторизація
+          else 
+            a.nav-link(href="/auth/login") Авторизація
+      
+  a.navbar-brand(href='/')
+    img(src='/img/logo.png', alt='logo')

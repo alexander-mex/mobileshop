@@ -1,0 +1,19 @@
+extends ../layouts/main.pug
+
+block content
+  div.single-phone
+    if phone && phone.title
+      h1= phone.title
+      div.grid
+        img(src=phone.image, alt=phone.title)
+        div.info
+          div.price= phone.price
+          div.description= phone.description
+      if isAuth
+        form(action='/cart/add', method='post')
+          input(type='hidden', name='_csrf', value=csrf)
+          input(type='hidden', name='id', value=phone.id)
+          button.card-link(type='submit') Купити
+      a.back(href='/phones') Повернутися назад
+    else
+      p Телефон не знайдено

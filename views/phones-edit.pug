@@ -1,0 +1,34 @@
+extends ./layouts/main.pug
+
+block content
+  div.container
+    h2 Редагувати телефон: #{phone.title}
+
+    form(action='/phones/edit', method='post')
+      .mb-3.edit-phone
+        label.form-label(for='brand') Brand телефона:
+        input.form-control(type='text', id='brand', aria-describedby='mobileHelp', name='brand', value=phone.brand)
+        #emailHelp.form-text *Введіть/замініть brand телефону
+      .mb-3.edit-phone
+        label.form-label(for='title') Модель телефона:
+        input.form-control(type='text', id='title', aria-describedby='mobileHelp', name='title', value=phone.title)
+        #emailHelp.form-text *Введіть/замініть модель телефону
+      .mb-3.edit-phone
+        label.form-label(for='price') Вартість телефону (UAH):
+        input.form-control(type='number', id='price', aria-describedby='mobileHelp', name='price', value=phone.price)
+        #emailHelp.form-text *Введіть/замініть ціну телефону
+      .mb-3.edit-phone
+        label.form-label(for='image') Фото телефона:
+        input.form-control(type='text', id='image', aria-describedby='mobileHelp', name='image', value=phone.image)
+        #emailHelp.form-text *Вставте посилання на фото телефону
+      .mb-3.edit-phone
+        label.form-label(for='description') Опис телефона:
+        textarea.form-control(type='text', id='description', aria-describedby='mobileHelp', name='description') #{phone.description}
+        #emailHelp.form-text *Введіть/замініть опис телефона
+      input(type='hidden', name='_csrf', value=csrf)
+      input(type='hidden', name='id', value=phone.id)
+      button.btn.btn-primary(type='submit') Редагувати телефон
+    form(action='/phones/remove', method='post', class='rem')
+      input(type='hidden', name='_csrf', value=csrf)
+      input(type='hidden', name='_id', value=phone._id)
+      button.btn.btn-primary.btn-delete(type='submit') Видалити телефон

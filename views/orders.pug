@@ -1,0 +1,54 @@
+extends ./layouts/main.pug
+
+block content
+  h1.order-head Оформлення
+
+  if orders && orders.length > 0
+    each order in orders
+      form(action="/orders", method="POST")
+        .row.justify-content-center.align-items-center
+          .card.mb-4
+            .card-body.text-center
+              .order-details
+                h5.card-title Замовлення: #{order.orderNumber.toString().substring(0, 5)}
+                p.date(data-label="Дата:") #{order.date}
+                p.client(data-label="Замовник:") #{order.user.userId.name}
+                p.email(data-label="e-mail:") #{order.user.userId.email}
+                ol
+                  each phone in order.phones
+                    li 
+                      a(href=`/phones/${phone.phone._id}`) #{`${phone.phone.title} - ${phone.count} шт.`}
+                      span.ml-2 #{phone.phone.price}x#{phone.count} =&nbsp
+                      span.ml-2.price #{phone.phone.price * phone.count}
+                p.price Ціна: 
+                  span.price #{order.price}
+              .order-form
+                .form-group
+                  label(for="name") Ім'я:
+                  input#name.form-control(type="text", name="name", required)
+
+                .form-group
+                  label(for="phone") Телефон:
+                  input#phone.form-control(type="tel", name="phone", required)
+
+                .form-group
+                  label(for="address") Адреса:
+                  input#address.form-control(type="text", name="address", required)
+
+                .form-group
+                  label(for="paymentType") Спосіб оплати:
+                  select#paymentType.form-control.cash(name="paymentType", required)
+                    option(value="cash") Готівкою при отриманні
+                    option(value="card") Онлайн картою
+
+                .form-group
+                  label(for="deliveryType") Спосіб доставки:
+                  select#deliveryType.form-control.post(name="deliveryType", required)
+                    option(value="ukrposhta") Укрпошта
+                    option(value="novaposhta") Нова Пошта
+                input(type='hidden', name='_csrf', value=csrf)
+                button.btn.btn-success(type="submit") Замовити
+
+  else
+    .order-none
+      p.orders-none Немає замовлень.
